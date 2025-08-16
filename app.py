@@ -102,14 +102,22 @@ if st.button("Run Self-Healing Analysis"):
         st.warning("Please enter system logs or incidents.")
     else:
         rag = TinyRAG()
+        g = None
         if LANGGRAPH_AVAILABLE:
-            g = lg.Graph()
-            g.add_node("incident_input", {"length": len(incident_input)})
+            try:
+                g = lg.Graph()
+                g.add_node("incident_input", {"length": len(incident_input)})
+            except Exception as e:
+                st.warning(f"LangGraph initialization failed: {e}")
+                g = None
         with st.spinner("Analyzing and generating remediation plan..."):
             report = agentic_self_healing(api_key, incident_input.strip(), rag)
         st.subheader("📝 Self-Healing Report")
         st.markdown(report)
-        if LANGGRAPH_AVAILABLE:
-            g.add_node("self_healing_output", {"length": len(report)})
-            g.add_edge("incident_input", "self_healing_output")
-            st.info("Pipeline recorded in LangGraph (local).")
+        if LANGGRAPH_AVAILABLE and g is not None:
+            try:
+                g.add_node("self_healing_output", {"length": len(report)})
+                g.add_edge("incident_input", "self_healing_output")
+                st.info("Pipeline recorded in LangGraph (local).")
+            except Exception as e:
+                st.warning(f"LangGraph recording failed: {e}")
