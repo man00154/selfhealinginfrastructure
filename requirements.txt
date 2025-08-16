@@ -1,3 +1,6 @@
 streamlit
 requests
-langgraph
+networkx
+matplotlib
+scikit-learn
+langgraph  # optional, fallback handled in app.py
