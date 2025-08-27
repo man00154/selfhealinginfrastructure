@@ -59,7 +59,7 @@ def agentic_self_healing(api_key: str, incident: str, rag: TinyRAG) -> str:
     context = " ".join(rag.retrieve(incident))
     prompt = f"""
 You are an expert Data Center AI assistant for self-healing infrastructure.
-Analyze the following incident or system log and provide a proactive remediation plan.
+Analyze the following incident or system log and provide a proactive remediation plan by your very very expert Data Center AI assistant for self-healing infrastructure.
 
 Incident:
 {incident}
